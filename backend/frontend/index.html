@@ -31,9 +31,9 @@
         <input type="text" id="vault-label" class="form-input" placeholder="e.g. Phone Fund, House Deposit..." />
       </div>
       <div class="form-group">
-        <label class="form-label">Amount to Lock (₦)</label>
+        <label class="form-label">Amount to Lock (GH₵)</label>
         <input type="number" id="vault-amount" class="form-input" placeholder="Enter amount" min="500" required />
-        <small style="color:var(--gray-600);font-size:12px">Available: <strong id="modal-balance">₦0</strong></small>
+        <small style="color:var(--gray-600);font-size:12px">Available: <strong id="modal-balance">GH₵0</strong></small>
       </div>
       <div class="form-group">
         <label class="form-label">Lock Duration</label>
@@ -91,7 +91,7 @@
       <div class="stat-label">Secure & Locked</div>
     </div>
     <div class="stat">
-      <div class="stat-value">₦0</div>
+      <div class="stat-value">GH₵0</div>
       <div class="stat-label">Fees Ever</div>
     </div>
     <div class="stat">
@@ -240,7 +240,7 @@
       <!-- Balance Card -->
       <div class="balance-card">
         <div class="balance-label">Available Balance</div>
-        <div class="balance-amount" id="dash-balance">₦0.00</div>
+        <div class="balance-amount" id="dash-balance">GH₵0.00</div>
         <div class="balance-sub">Ready to deposit or lock in a vault</div>
         <div class="balance-actions">
           <button class="balance-btn balance-btn-primary" onclick="navigate('deposit')">+ Deposit</button>
@@ -252,7 +252,7 @@
       <div class="quick-stats">
         <div class="stat-card">
           <div class="stat-card-icon">🔒</div>
-          <div class="stat-card-value" id="stat-locked">₦0</div>
+          <div class="stat-card-value" id="stat-locked">GH₵0</div>
           <div class="stat-card-label">Total Locked</div>
         </div>
         <div class="stat-card">
@@ -262,7 +262,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-card-icon">⬇️</div>
-          <div class="stat-card-value" id="stat-deposited">₦0</div>
+          <div class="stat-card-value" id="stat-deposited">GH₵0</div>
           <div class="stat-card-label">Total Deposited</div>
         </div>
       </div>
@@ -315,17 +315,17 @@
 
         <form onsubmit="handleDeposit(event)">
           <div class="form-group">
-            <label class="form-label">Amount (₦)</label>
+            <label class="form-label">Amount (GH₵)</label>
             <input type="number" id="deposit-amount" class="form-input" placeholder="Enter amount to deposit" min="100" required style="font-size:24px;font-family:'Syne',sans-serif;font-weight:700" />
           </div>
 
           <!-- Quick amounts -->
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
-            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="500">₦500</button>
-            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="1000">₦1,000</button>
-            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="5000">₦5,000</button>
-            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="10000">₦10,000</button>
-            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="50000">₦50,000</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="500">GH₵500</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="1000">GH₵1,000</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="5000">GH₵5,000</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="10000">GH₵10,000</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="50000">GH₵50,000</button>
           </div>
 
           <!-- Payment Method -->

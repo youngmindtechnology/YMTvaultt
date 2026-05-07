@@ -34,7 +34,7 @@ function toast(msg, type = 'info', duration = 3500) {
 }
 
 function fmt(amount) {
-  return '₦' + Number(amount).toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return 'GH₵' + Number(amount).toLocaleString('en-GH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function fmtDate(iso) {
@@ -191,7 +191,7 @@ function renderVaults() {
     return `<div class="vault-card ${isLocked ? 'locked' : isUnlocked ? 'unlocked' : 'withdrawn'}">
       <div class="vault-icon">${isWithdrawn ? '✅' : isUnlocked ? '🔓' : '🔒'}</div>
       <div class="vault-label">${vault.label}</div>
-      <div class="vault-amount"><span>₦</span>${Number(vault.amount).toLocaleString()}</div>
+      <div class="vault-amount"><span>GH₵</span>${Number(vault.amount).toLocaleString()}</div>
       <div class="vault-meta">
         ${statusBadge}
         <span class="badge badge-blue">${vault.duration} month${vault.duration > 1 ? 's' : ''}</span>
@@ -253,7 +253,7 @@ function updateCountdown(vault, el) {
 async function handleDeposit(e) {
   e.preventDefault();
   const amount = parseFloat($('deposit-amount').value);
-  if (!amount || amount < 100) return toast('Minimum deposit is ₦100', 'error');
+  if (!amount || amount < 100) return toast('Minimum deposit is GH₵100', 'error');
 
   const method = document.querySelector('input[name="pay-method"]:checked')?.value || 'demo';
 
@@ -276,7 +276,7 @@ async function handleDeposit(e) {
     showLoading(true);
     try {
       await apiFetch('/deposit', { method: 'POST', body: JSON.stringify({ amount, reference: `DEMO_${Date.now()}` }) });
-      toast(`₦${amount.toLocaleString()} added to your wallet! 💰`, 'success');
+      toast(`GH₵${amount.toLocaleString()} added to your wallet! 💰`, 'success');
       $('deposit-amount').value = '';
       await loadDashboard();
     } catch (err) {
@@ -293,7 +293,7 @@ async function verifyPayment() {
   showLoading(true);
   try {
     const data = await apiFetch('/verify-payment', { method: 'POST', body: JSON.stringify({ reference, amount }) });
-    toast(`₦${data.amount?.toLocaleString() || amount.toLocaleString()} deposited successfully! 🎉`, 'success');
+    toast(`GH₵${data.amount?.toLocaleString() || amount.toLocaleString()} deposited successfully! 🎉`, 'success');
     $('verify-section').classList.add('hidden');
     await loadDashboard();
   } catch (err) {
@@ -318,7 +318,7 @@ async function createVault(e) {
   const duration = parseInt($('vault-duration').value);
   const label = $('vault-label').value.trim() || 'My Vault';
 
-  if (!amount || amount < 500) return toast('Minimum vault amount is ₦500', 'error');
+  if (!amount || amount < 500) return toast('Minimum vault amount is GH₵500', 'error');
   if (!duration) return toast('Please select a duration', 'error');
   if (amount > state.user.balance) return toast('Insufficient balance', 'error');
 
