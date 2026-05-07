@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YoungVault — Lock Your Future</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ─── LOADING OVERLAY ─── -->
+<div id="loading-overlay" class="hidden">
+  <div class="spinner"></div>
+</div>
+
+<!-- ─── TOAST CONTAINER ─── -->
+<div id="toast-container"></div>
+
+<!-- ─── VAULT MODAL ─── -->
+<div id="vault-modal" class="modal-overlay hidden" onclick="if(event.target===this)closeVaultModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🔒 Create New Vault</div>
+      <button class="modal-close" onclick="closeVaultModal()">✕</button>
+    </div>
+    <p style="font-size:14px;color:var(--gray-600);margin-bottom:24px">Lock your savings and resist impulsive spending. Your future self will thank you.</p>
+    <form onsubmit="createVault(event)">
+      <div class="form-group">
+        <label class="form-label">Vault Name</label>
+        <input type="text" id="vault-label" class="form-input" placeholder="e.g. Phone Fund, House Deposit..." />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount to Lock (₦)</label>
+        <input type="number" id="vault-amount" class="form-input" placeholder="Enter amount" min="500" required />
+        <small style="color:var(--gray-600);font-size:12px">Available: <strong id="modal-balance">₦0</strong></small>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Lock Duration</label>
+        <select id="vault-duration" class="form-input form-select" required>
+          <option value="">Select duration...</option>
+          <option value="1">1 Month</option>
+          <option value="2">2 Months</option>
+          <option value="3">3 Months</option>
+          <option value="6">6 Months</option>
+          <option value="12">12 Months (1 Year)</option>
+          <option value="24">24 Months (2 Years)</option>
+        </select>
+      </div>
+      <div style="background:var(--yellow-light);border-radius:10px;padding:14px;margin-bottom:20px;font-size:13px;color:var(--blue)">
+        ⚠️ <strong>Important:</strong> Once locked, you <strong>cannot</strong> withdraw until the duration ends. Choose wisely!
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">🔒 Lock My Savings</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 1: LANDING
+═══════════════════════════════════════════ -->
+<div id="page-landing" class="page">
+  <div class="landing-bg"></div>
+
+  <nav class="landing-nav">
+    <div class="landing-logo">Young<span>Vault</span></div>
+    <div class="landing-nav-links">
+      <button class="btn btn-outline" style="color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.3)" onclick="navigate('login')">Log In</button>
+      <button class="btn btn-primary" onclick="navigate('register')">Get Started</button>
+    </div>
+  </nav>
+
+  <div class="landing-hero">
+    <div class="landing-tag">
+      <span>🔒</span> By Young Mind Technology
+    </div>
+    <h1>Lock Your Savings.<br><span class="highlight">Build Your Future.</span></h1>
+    <p>Stop impulsive spending. Create locked savings vaults that keep your money safe until you actually need it — the smart way to save.</p>
+    <div class="landing-cta">
+      <button class="btn btn-primary" style="font-size:17px;padding:16px 36px" onclick="navigate('register')">
+        🚀 Start Saving Free
+      </button>
+      <button class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.4);font-size:17px;padding:16px 36px" onclick="navigate('login')">
+        Sign In
+      </button>
+    </div>
+  </div>
+
+  <div class="landing-stats">
+    <div class="stat">
+      <div class="stat-value">100%</div>
+      <div class="stat-label">Secure & Locked</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">₦0</div>
+      <div class="stat-label">Fees Ever</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">∞</div>
+      <div class="stat-label">Vaults You Can Create</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 2: REGISTER
+═══════════════════════════════════════════ -->
+<div id="page-register" class="page">
+  <div class="auth-container">
+    <div class="auth-left">
+      <div class="auth-brand">Young<span>Vault</span></div>
+      <div class="auth-tagline">Save Smart.<br><span class="hl">Stay Locked.</span><br>Win Big.</div>
+      <div class="auth-desc">Join thousands of disciplined savers who lock their money and unlock their future.</div>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🔒</div>
+          <span>Time-locked savings vaults that prevent early withdrawal</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📱</div>
+          <span>Real-time countdown timer on every vault</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">⚡</div>
+          <span>Instant deposits via Paystack payment</span>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right">
+      <div class="auth-form-box">
+        <h2>Create Account</h2>
+        <p class="sub">Start your disciplined savings journey today.</p>
+        <form onsubmit="register(event)">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="reg-name" class="form-input" placeholder="Enter your full name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="reg-email" class="form-input" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="tel" id="reg-phone" class="form-input" placeholder="+234 800 000 0000" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="reg-password" class="form-input" placeholder="Minimum 6 characters" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" style="margin-bottom:16px">Create My Account →</button>
+        </form>
+        <div class="auth-switch">Already have an account? <a onclick="navigate('login')">Sign in</a></div>
+        <div class="auth-switch" style="margin-top:8px"><a onclick="navigate('landing')" style="color:var(--gray-400)">← Back to home</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 3: LOGIN
+═══════════════════════════════════════════ -->
+<div id="page-login" class="page">
+  <div class="auth-container">
+    <div class="auth-left">
+      <div class="auth-brand">Young<span>Vault</span></div>
+      <div class="auth-tagline">Welcome<br><span class="hl">Back!</span></div>
+      <div class="auth-desc">Your savings are safe and still locked. Keep going — financial discipline pays off.</div>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">💰</div>
+          <span>Check your vault balances and countdown timers</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📊</div>
+          <span>View your complete transaction history</span>
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🎯</div>
+          <span>Stay on track with your savings goals</span>
+        </div>
+      </div>
+    </div>
+    <div class="auth-right">
+      <div class="auth-form-box">
+        <h2>Welcome Back</h2>
+        <p class="sub">Sign in to your YoungVault account.</p>
+        <form onsubmit="login(event)">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="Your password" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" style="margin-bottom:16px">Sign In →</button>
+        </form>
+        <div class="auth-switch">Don't have an account? <a onclick="navigate('register')">Create one</a></div>
+        <div class="auth-switch" style="margin-top:8px"><a onclick="navigate('landing')" style="color:var(--gray-400)">← Back to home</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 4: DASHBOARD
+═══════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">Young<span>Vault</span></div>
+    <div class="nav-links">
+      <button class="nav-link active" data-page="dashboard" onclick="navigate('dashboard')"><span>🏠 </span>Dashboard</button>
+      <button class="nav-link" data-page="deposit" onclick="navigate('deposit')"><span>💳 </span>Deposit</button>
+      <button class="nav-link" data-page="transactions" onclick="navigate('transactions')"><span>📋 </span>History</button>
+    </div>
+    <div class="nav-user">
+      <div class="nav-avatar" id="nav-avatar">U</div>
+      <span id="nav-user-name" style="font-weight:600">User</span>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <h1>My Dashboard</h1>
+    <p>Track your savings and stay disciplined</p>
+  </div>
+
+  <div class="page-content">
+    <div class="container">
+
+      <!-- Motivational -->
+      <div class="motivational">
+        <div class="motivational-icon">💡</div>
+        <div class="motivational-text" id="motivational-text">
+          <strong>Stay Disciplined!</strong>Future you will thank you for every naira saved today.
+        </div>
+      </div>
+
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <div class="balance-label">Available Balance</div>
+        <div class="balance-amount" id="dash-balance">₦0.00</div>
+        <div class="balance-sub">Ready to deposit or lock in a vault</div>
+        <div class="balance-actions">
+          <button class="balance-btn balance-btn-primary" onclick="navigate('deposit')">+ Deposit</button>
+          <button class="balance-btn balance-btn-secondary" onclick="openCreateVault(); document.getElementById('modal-balance').textContent = document.getElementById('dash-balance').textContent">🔒 Create Vault</button>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="quick-stats">
+        <div class="stat-card">
+          <div class="stat-card-icon">🔒</div>
+          <div class="stat-card-value" id="stat-locked">₦0</div>
+          <div class="stat-card-label">Total Locked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">🏦</div>
+          <div class="stat-card-value" id="stat-vaults">0</div>
+          <div class="stat-card-label">Active Vaults</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">⬇️</div>
+          <div class="stat-card-value" id="stat-deposited">₦0</div>
+          <div class="stat-card-label">Total Deposited</div>
+        </div>
+      </div>
+
+      <!-- Vaults -->
+      <div class="section-header">
+        <div class="section-title">🔒 My Vaults</div>
+        <button class="btn btn-primary btn-sm" onclick="openCreateVault(); document.getElementById('modal-balance').textContent = document.getElementById('dash-balance').textContent">+ New Vault</button>
+      </div>
+      <div id="vaults-container" class="vault-grid" style="margin-bottom:32px"></div>
+
+      <!-- Recent Transactions -->
+      <div class="section-header">
+        <div class="section-title">📋 Recent Activity</div>
+        <button class="btn btn-outline btn-sm" onclick="navigate('transactions')">View All</button>
+      </div>
+      <div id="recent-tx" class="tx-list"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 5: DEPOSIT
+═══════════════════════════════════════════ -->
+<div id="page-deposit" class="page">
+  <nav class="nav">
+    <div class="nav-logo">Young<span>Vault</span></div>
+    <div class="nav-links">
+      <button class="nav-link" data-page="dashboard" onclick="navigate('dashboard')"><span>🏠 </span>Dashboard</button>
+      <button class="nav-link active" data-page="deposit" onclick="navigate('deposit')"><span>💳 </span>Deposit</button>
+      <button class="nav-link" data-page="transactions" onclick="navigate('transactions')"><span>📋 </span>History</button>
+    </div>
+    <div class="nav-user">
+      <div class="nav-avatar" id="dep-nav-avatar">U</div>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>💳 Deposit Funds</h1>
+    <p>Add money to your YoungVault wallet</p>
+  </div>
+
+  <div class="page-content">
+    <div class="container" style="max-width:500px">
+      <div class="card">
+        <div class="card-title">Add Money</div>
+        <div class="card-subtitle">Deposit funds to your wallet, then lock them in a vault.</div>
+
+        <form onsubmit="handleDeposit(event)">
+          <div class="form-group">
+            <label class="form-label">Amount (₦)</label>
+            <input type="number" id="deposit-amount" class="form-input" placeholder="Enter amount to deposit" min="100" required style="font-size:24px;font-family:'Syne',sans-serif;font-weight:700" />
+          </div>
+
+          <!-- Quick amounts -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="500">₦500</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="1000">₦1,000</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="5000">₦5,000</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="10000">₦10,000</button>
+            <button type="button" class="quick-amount btn btn-outline btn-sm" data-amount="50000">₦50,000</button>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="form-group">
+            <label class="form-label">Payment Method</label>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--gray-200);border-radius:10px;cursor:pointer;transition:all 0.2s" onclick="this.style.borderColor='var(--blue)'">
+                <input type="radio" name="pay-method" value="paystack" style="accent-color:var(--blue)" />
+                <div>
+                  <div style="font-weight:600;color:var(--blue)">💳 Paystack</div>
+                  <div style="font-size:12px;color:var(--gray-600)">Card, bank transfer, USSD</div>
+                </div>
+              </label>
+              <label style="display:flex;align-items:center;gap:12px;padding:14px;border:2px solid var(--yellow);border-radius:10px;cursor:pointer;background:var(--yellow-light)">
+                <input type="radio" name="pay-method" value="demo" checked style="accent-color:var(--blue)" />
+                <div>
+                  <div style="font-weight:600;color:var(--blue)">🧪 Demo Mode</div>
+                  <div style="font-size:12px;color:var(--gray-600)">Simulate deposit (for testing)</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" style="font-size:16px;padding:16px">
+            Deposit Now →
+          </button>
+        </form>
+
+        <!-- Paystack Verify Section -->
+        <div id="verify-section" class="hidden" style="margin-top:20px;padding:20px;background:var(--blue-soft);border-radius:10px">
+          <p style="font-weight:600;color:var(--blue);margin-bottom:12px">✅ Completed Paystack Payment?</p>
+          <input type="hidden" id="verify-reference" />
+          <button class="btn btn-secondary btn-full" onclick="verifyPayment()">Verify & Credit Wallet</button>
+        </div>
+
+        <div style="margin-top:24px;padding:16px;background:var(--gray-50);border-radius:10px;font-size:13px;color:var(--gray-600)">
+          💡 <strong>Tip:</strong> After depositing, create a vault to lock your funds and resist impulsive spending. Your future self will thank you!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 6: TRANSACTIONS
+═══════════════════════════════════════════ -->
+<div id="page-transactions" class="page">
+  <nav class="nav">
+    <div class="nav-logo">Young<span>Vault</span></div>
+    <div class="nav-links">
+      <button class="nav-link" data-page="dashboard" onclick="navigate('dashboard')"><span>🏠 </span>Dashboard</button>
+      <button class="nav-link" data-page="deposit" onclick="navigate('deposit')"><span>💳 </span>Deposit</button>
+      <button class="nav-link active" data-page="transactions" onclick="navigate('transactions')"><span>📋 </span>History</button>
+    </div>
+    <div class="nav-user">
+      <div class="nav-avatar" id="tx-nav-avatar">U</div>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>📋 Transaction History</h1>
+    <p>All your deposits, vaults, and withdrawals</p>
+  </div>
+
+  <div class="page-content">
+    <div class="container">
+      <div id="all-tx" class="tx-list"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

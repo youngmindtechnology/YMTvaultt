@@ -18,7 +18,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, './frontend')));
 
 // Database file path
 const DB_PATH = path.join(__dirname, 'database.json');
@@ -359,7 +359,7 @@ app.post('/withdraw', authMiddleware, (req, res) => {
 // SERVE FRONTEND
 // ─────────────────────────────────────────────
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+  res.sendFile(path.join(__dirname, './frontend/index.html'));
 });
 
 initDB();
