@@ -12,7 +12,11 @@ const JWT_SECRET = 'YMT_!login';
 const PAYSTACK_SECRET = 'sk_test_5479f29b5d1c273d975e6c8fac006f234b06c89d'; // Replace with your Paystack secret key
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
