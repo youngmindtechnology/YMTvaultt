@@ -2,7 +2,7 @@
 // YOUNGVAULT - Main App Logic
 // ─────────────────────────────────────────────
 
-const API = 'http://localhost:3000';
+const API = 'https://youngvault.onrender.com';
 let state = {
   token: localStorage.getItem('yv_token'),
   user: JSON.parse(localStorage.getItem('yv_user') || 'null'),
